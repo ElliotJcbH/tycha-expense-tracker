@@ -66,4 +66,5 @@ class DefaultFirebaseOptions {
     projectId: 'expense-tracker-db-6acc9',
     storageBucket: 'expense-tracker-db-6acc9.firebasestorage.app',
   );
+
 }
