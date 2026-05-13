@@ -21,14 +21,43 @@ class _AddExpenseFormState extends State<AddExpenseForm> {
   late String category;
   late DateTime date;
   late String note;
+  String customCategory = '';
 
   @override
   void initState() {
     super.initState();
     amount = widget.expense?.amount ?? 0.0;
-    category = widget.expense?.category ?? categories[0];
+    final existingCategory = widget.expense?.category ?? categories[0];
+    final isKnownCategory = categories.contains(existingCategory);
+    category = isKnownCategory ? existingCategory : 'Others';
+    customCategory = isKnownCategory ? '' : existingCategory;
     date = widget.expense?.date ?? DateTime.now();
     note = widget.expense?.note ?? '';
+  }
+
+  Future<void> _confirmDelete(BuildContext context) async {
+    final shouldDelete = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Delete expense?'),
+        content: const Text('This action cannot be undone.'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text('Delete'),
+          ),
+        ],
+      ),
+    );
+
+    if (shouldDelete ?? false) {
+      await widget.db.deleteExpense(widget.expense!.id);
+      if (mounted) Navigator.pop(context);
+    }
   }
 
   @override
@@ -65,6 +94,18 @@ class _AddExpenseFormState extends State<AddExpenseForm> {
                   }
                 },
               ),
+              if (category == 'Others')
+                TextFormField(
+                  initialValue: customCategory,
+                  decoration: const InputDecoration(labelText: 'Custom category'),
+                  validator: (val) {
+                    if (category == 'Others' && (val == null || val.trim().isEmpty)) {
+                      return 'Enter a custom category';
+                    }
+                    return null;
+                  },
+                  onChanged: (val) => setState(() => customCategory = val),
+                ),
               const SizedBox(height: 20),
               Row(
                 children: [
@@ -98,16 +139,32 @@ class _AddExpenseFormState extends State<AddExpenseForm> {
                 ),
                 onPressed: () async {
                   if (_formKey.currentState?.validate() ?? false) {
+                    final resolvedCategory =
+                        category == 'Others' ? customCategory.trim() : category;
                     if (widget.expense == null) {
-                      await widget.db.addExpense(amount, category, date, note);
+                      await widget.db.addExpense(amount, resolvedCategory, date, note);
                     } else {
-                      await widget.db.updateExpense(widget.expense!.id, amount, category, date, note);
+                      await widget.db.updateExpense(
+                        widget.expense!.id,
+                        amount,
+                        resolvedCategory,
+                        date,
+                        note,
+                      );
                     }
                     if (mounted) Navigator.pop(context);
                   }
                 },
                 child: Text(widget.expense == null ? 'Save' : 'Update'),
               ),
+              if (widget.expense != null) ...[
+                const SizedBox(height: 10),
+                TextButton(
+                  onPressed: () => _confirmDelete(context),
+                  style: TextButton.styleFrom(foregroundColor: Colors.red),
+                  child: const Text('Delete Expense'),
+                ),
+              ],
             ],
           ),
         ),

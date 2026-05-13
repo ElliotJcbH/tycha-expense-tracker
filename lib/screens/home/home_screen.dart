@@ -17,6 +17,30 @@ class HomeScreen extends StatelessWidget {
     final AuthService auth = AuthService();
     final DatabaseService db = DatabaseService(uid: user.uid);
 
+    Future<void> confirmLogout() async {
+      final shouldLogout = await showDialog<bool>(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Sign out?'),
+          content: const Text('Are you sure you want to sign out?'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context, false),
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () => Navigator.pop(context, true),
+              child: const Text('Sign out'),
+            ),
+          ],
+        ),
+      );
+
+      if (shouldLogout ?? false) {
+        await auth.signOut();
+      }
+    }
+
     return StreamBuilder<List<Expense>>(
       stream: db.expenses,
       builder: (context, snapshot) {
@@ -30,67 +54,71 @@ class HomeScreen extends StatelessWidget {
 
         return Scaffold(
           backgroundColor: Colors.white,
-          body: Column(
-            children: [
-              // Header Section
-              Container(
-                height: MediaQuery.of(context).size.height * 0.4,
-                width: double.infinity,
-                color: const Color(0xFF0000FF),
-                padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 60),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text(
-                          'Tycha',
-                          style: TextStyle(color: Colors.white, fontSize: 18),
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.logout, color: Colors.white),
-                          onPressed: () async => await auth.signOut(),
-                        ),
-                      ],
-                    ),
-                    const Spacer(),
-                    Center(
-                      child: Column(
+          body: SafeArea(
+            child: Column(
+              children: [
+                // Header Section
+                Container(
+                  height: MediaQuery.of(context).size.height * 0.36,
+                  width: double.infinity,
+                  color: const Color(0xFF0000FF),
+                  padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 24),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           const Text(
-                            'You\'ve Spent',
-                            style: TextStyle(color: Colors.white70, fontSize: 16),
+                            'Tycha',
+                            style: TextStyle(color: Colors.white, fontSize: 18),
                           ),
-                          const SizedBox(height: 10),
-                          Text(
-                            NumberFormat('#,###').format(totalSpent),
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 60,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const SizedBox(height: 10),
-                          const Text(
-                            'This Month',
-                            style: TextStyle(color: Colors.white70, fontSize: 16),
+                          IconButton(
+                            icon: const Icon(Icons.logout, color: Colors.white),
+                            onPressed: confirmLogout,
                           ),
                         ],
                       ),
-                    ),
-                    const Spacer(),
-                  ],
+                      Center(
+                        child: Column(
+                          children: [
+                            const Text(
+                              'You\'ve Spent',
+                              style: TextStyle(color: Colors.white70, fontSize: 16),
+                            ),
+                            const SizedBox(height: 8),
+                            FittedBox(
+                              fit: BoxFit.scaleDown,
+                              child: Text(
+                                NumberFormat('#,###').format(totalSpent),
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 60,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            const Text(
+                              'This Month',
+                              style: TextStyle(color: Colors.white70, fontSize: 16),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              // List Section
-              Expanded(
-                child: ExpenseList(
-                  expenses: snapshot.data ?? [],
-                  db: db,
+                // List Section
+                Expanded(
+                  child: ExpenseList(
+                    expenses: snapshot.data ?? [],
+                    db: db,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
           floatingActionButton: Column(
             mainAxisAlignment: MainAxisAlignment.end,
