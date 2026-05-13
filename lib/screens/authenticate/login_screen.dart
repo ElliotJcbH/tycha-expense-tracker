@@ -47,14 +47,21 @@ class _LoginScreenState extends State<LoginScreen> {
                 const SizedBox(height: 60.0),
                 const Text('Email', style: TextStyle(color: Colors.white)),
                 TextFormField(
-                  style: const TextStyle(color: Colors.white),
+                  style: const TextStyle(color: Colors.black),
+                  cursorColor: Colors.black,
                   decoration: const InputDecoration(
                     hintText: 'ex. yourname@email.com',
-                    hintStyle: TextStyle(color: Colors.white54, fontSize: 14),
-                    enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.white)),
-                    focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.white, width: 2.0)),
+                    hintStyle: TextStyle(color: Colors.black54, fontSize: 14),
+                    filled: true,
+                    fillColor: Colors.white,
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.white),
+                      borderRadius: BorderRadius.all(Radius.circular(12)),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.white, width: 2.0),
+                      borderRadius: BorderRadius.all(Radius.circular(12)),
+                    ),
                   ),
                   validator: (val) => (val == null || val.isEmpty) ? 'Enter an email' : null,
                   onChanged: (val) {
@@ -65,14 +72,21 @@ class _LoginScreenState extends State<LoginScreen> {
                 const Text('Password', style: TextStyle(color: Colors.white)),
                 TextFormField(
                   obscureText: true,
-                  style: const TextStyle(color: Colors.white),
+                  style: const TextStyle(color: Colors.black),
+                  cursorColor: Colors.black,
                   decoration: const InputDecoration(
                     hintText: 'ex. 282@sas00L!!',
-                    hintStyle: TextStyle(color: Colors.white54, fontSize: 14),
-                    enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.white)),
-                    focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.white, width: 2.0)),
+                    hintStyle: TextStyle(color: Colors.black54, fontSize: 14),
+                    filled: true,
+                    fillColor: Colors.white,
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.white),
+                      borderRadius: BorderRadius.all(Radius.circular(12)),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.white, width: 2.0),
+                      borderRadius: BorderRadius.all(Radius.circular(12)),
+                    ),
                   ),
                   validator: (val) => (val == null || val.length < 6)
                       ? 'Enter a password 6+ chars long'
