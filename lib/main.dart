@@ -5,11 +5,41 @@ import 'screens/wrapper.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // try {
+  //   await Firebase.initializeApp().timeout(
+  //     const Duration(seconds: 5),
+  //     onTimeout: () => throw Exception('Firebase initialization timed out'),
+  //   );
+  // } catch (e) {
+  //   debugPrint('Firebase failed: $e');
+  //   runApp(ErrorApp(message: e.toString()));
+  // }
+
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
   runApp(const MyApp());
 }
+
+// class ErrorApp extends StatelessWidget {
+//   final String message;
+//
+//   const ErrorApp({
+//     required this.message
+//   })
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       home: Scaffold(
+//         body: Center(
+//           child: Text(message)
+//         )
+//       )
+//     )
+//   }
+// }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
