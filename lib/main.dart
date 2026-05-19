@@ -51,6 +51,24 @@ class MyApp extends StatelessWidget {
       seedColor: seedColor,
       brightness: Brightness.light,
     );
+    final baseTextTheme = ThemeData.light().textTheme;
+    final textTheme = baseTextTheme.copyWith(
+      displayLarge: baseTextTheme.displayLarge?.copyWith(fontFamily: 'SpaceGrotesk'),
+      displayMedium: baseTextTheme.displayMedium?.copyWith(fontFamily: 'SpaceGrotesk'),
+      displaySmall: baseTextTheme.displaySmall?.copyWith(fontFamily: 'SpaceGrotesk'),
+      headlineLarge: baseTextTheme.headlineLarge?.copyWith(fontFamily: 'SpaceGrotesk'),
+      headlineMedium: baseTextTheme.headlineMedium?.copyWith(fontFamily: 'SpaceGrotesk'),
+      headlineSmall: baseTextTheme.headlineSmall?.copyWith(fontFamily: 'SpaceGrotesk'),
+      titleLarge: baseTextTheme.titleLarge?.copyWith(fontFamily: 'SpaceGrotesk'),
+      titleMedium: baseTextTheme.titleMedium?.copyWith(fontFamily: 'SpaceGrotesk'),
+      titleSmall: baseTextTheme.titleSmall?.copyWith(fontFamily: 'SpaceGrotesk'),
+      bodyLarge: baseTextTheme.bodyLarge?.copyWith(fontFamily: 'SpaceMono'),
+      bodyMedium: baseTextTheme.bodyMedium?.copyWith(fontFamily: 'SpaceMono'),
+      bodySmall: baseTextTheme.bodySmall?.copyWith(fontFamily: 'SpaceMono'),
+      labelLarge: baseTextTheme.labelLarge?.copyWith(fontFamily: 'SpaceMono'),
+      labelMedium: baseTextTheme.labelMedium?.copyWith(fontFamily: 'SpaceMono'),
+      labelSmall: baseTextTheme.labelSmall?.copyWith(fontFamily: 'SpaceMono'),
+    );
 
     return MaterialApp(
       title: 'Tycha Expense Tracker',
@@ -58,6 +76,9 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: colorScheme,
         useMaterial3: true,
+        fontFamily: 'SpaceMono',
+        textTheme: textTheme,
+        primaryTextTheme: textTheme,
         scaffoldBackgroundColor: const Color(0xFFF7F8FC),
         appBarTheme: AppBarTheme(
           backgroundColor: seedColor,
