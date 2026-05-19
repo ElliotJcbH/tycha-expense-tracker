@@ -31,11 +31,14 @@ class _SignupScreenState extends State<SignupScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 const SizedBox(height: 80.0),
-                const Text(
-                  'Tycha',
-                  style: TextStyle(color: Colors.white, fontSize: 18),
+                Center(
+                  child: Image.asset(
+                    'assets/images/TychaLogo.png',
+                    width: 140,
+                    fit: BoxFit.contain,
+                  ),
                 ),
-                const SizedBox(height: 10.0),
+                const SizedBox(height: 16.0),
                 const Text(
                   'Create Your\nAccount.',
                   style: TextStyle(

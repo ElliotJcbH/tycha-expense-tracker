@@ -31,11 +31,14 @@ class _LoginScreenState extends State<LoginScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 const SizedBox(height: 80.0),
-                const Text(
-                  'Tycha',
-                  style: TextStyle(color: Colors.white, fontSize: 18),
+                Center(
+                  child: Image.asset(
+                    'assets/images/TychaLogo.png',
+                    width: 140,
+                    fit: BoxFit.contain,
+                  ),
                 ),
-                const SizedBox(height: 10.0),
+                const SizedBox(height: 16.0),
                 const Text(
                   'Start Spending\nWisely.',
                   style: TextStyle(
