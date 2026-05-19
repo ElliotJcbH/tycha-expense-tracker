@@ -34,7 +34,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 Center(
                   child: Image.asset(
                     'assets/images/TychaLogo.png',
-                    width: 140,
+                    width: 100,
                     fit: BoxFit.contain,
                   ),
                 ),
