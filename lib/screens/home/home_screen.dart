@@ -68,22 +68,6 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  void _showExportPlaceholder() {
-    showDialog<void>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Export CSV'),
-        content: const Text('Export is coming soon.'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('OK'),
-          ),
-        ],
-      ),
-    );
-  }
-
   void _openAddExpenseSheet(DatabaseService db, {Expense? expense, String? initialCategory}) {
     showModalBottomSheet(
       context: context,
@@ -343,17 +327,9 @@ class _HomeScreenState extends State<HomeScreen> {
                               'Tycha',
                               style: TextStyle(color: Colors.white, fontSize: 18),
                             ),
-                            Row(
-                              children: [
-                                IconButton(
-                                  icon: const Icon(Icons.download_rounded, color: Colors.white),
-                                  onPressed: _showExportPlaceholder,
-                                ),
-                                IconButton(
-                                  icon: const Icon(Icons.logout, color: Colors.white),
-                                  onPressed: () => _confirmSignOut(auth),
-                                ),
-                              ],
+                            IconButton(
+                              icon: const Icon(Icons.logout, color: Colors.white),
+                              onPressed: () => _confirmSignOut(auth),
                             ),
                           ],
                         ),
