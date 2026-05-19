@@ -24,30 +24,32 @@ class _LoginScreenState extends State<LoginScreen> {
       backgroundColor: const Color(0xFF0000FF),
       body: SingleChildScrollView(
         child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 40.0),
+          padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 24.0),
           child: Form(
             key: _formKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                const SizedBox(height: 80.0),
-                Center(
+                const SizedBox(height: 48.0),
+                Align(
+                  alignment: Alignment.centerLeft,
                   child: Image.asset(
                     'assets/images/TychaLogo.png',
-                    width: 100,
+                    width: 110,
                     fit: BoxFit.contain,
                   ),
                 ),
-                const SizedBox(height: 16.0),
+                const SizedBox(height: 12.0),
                 const Text(
                   'Start Spending\nWisely.',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 40,
                     fontWeight: FontWeight.bold,
+                    fontFamily: 'SpaceGrotesk',
                   ),
                 ),
-                const SizedBox(height: 60.0),
+                const SizedBox(height: 28.0),
                 const Text('Email', style: TextStyle(color: Colors.white)),
                 TextFormField(
                   style: const TextStyle(color: Colors.black),
@@ -71,7 +73,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     setState(() => email = val);
                   },
                 ),
-                const SizedBox(height: 30.0),
+                const SizedBox(height: 16.0),
                 const Text('Password', style: TextStyle(color: Colors.white)),
                 TextFormField(
                   obscureText: true,
@@ -98,7 +100,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     setState(() => password = val);
                   },
                 ),
-                const SizedBox(height: 50.0),
+                const SizedBox(height: 24.0),
                 Center(
                   child: SizedBox(
                     width: double.infinity,
@@ -137,7 +139,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 20.0),
+                const SizedBox(height: 36.0),
                 Center(
                   child: Column(
                     children: [
@@ -150,6 +152,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           style: TextStyle(
                             color: Colors.white,
                             decoration: TextDecoration.underline,
+                            decorationColor: Colors.white,
                             fontWeight: FontWeight.bold,
                           ),
                         ),

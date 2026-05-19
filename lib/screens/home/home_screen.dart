@@ -8,7 +8,7 @@ import 'add_expense_form.dart';
 import 'expense_list.dart';
 import 'chart_screen.dart';
 
-enum TimeRange { month, week, all }
+enum TimeRange { month, week, year, all }
 
 class HomeScreen extends StatefulWidget {
   final User user;
@@ -106,6 +106,9 @@ class _HomeScreenState extends State<HomeScreen> {
     } else if (selectedRange == TimeRange.week) {
       final weekAgo = now.subtract(const Duration(days: 7));
       filtered = filtered.where((e) => e.date.isAfter(weekAgo)).toList();
+    } else if (selectedRange == TimeRange.year) {
+      final yearAgo = DateTime(now.year - 1, now.month, now.day);
+      filtered = filtered.where((e) => e.date.isAfter(yearAgo)).toList();
     }
 
     if (selectedCategory != 'All') {
@@ -125,7 +128,9 @@ class _HomeScreenState extends State<HomeScreen> {
   String _rangeLabel() {
     switch (selectedRange) {
       case TimeRange.week:
-        return 'Last 7 Days';
+        return 'This Week';
+      case TimeRange.year:
+        return 'This Year';
       case TimeRange.all:
         return 'All Time';
       case TimeRange.month:
@@ -139,6 +144,7 @@ class _HomeScreenState extends State<HomeScreen> {
     switch (selectedRange) {
       case TimeRange.month:
       case TimeRange.week:
+      case TimeRange.year:
         return year.toString();
       case TimeRange.all:
       default:
@@ -233,53 +239,6 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  Widget _buildMonthDelta(List<Expense> expenses) {
-    final totals = _monthTotals(expenses);
-    final current = totals['current'] ?? 0;
-    final previous = totals['previous'] ?? 0;
-
-    final diff = current - previous;
-    final percent = previous == 0 ? 0 : (diff / previous) * 100;
-    final isUp = diff >= 0;
-    final color = isUp ? Colors.greenAccent : Colors.redAccent;
-    final sign = isUp ? '+' : '';
-
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Icon(isUp ? Icons.trending_up : Icons.trending_down, color: color, size: 16),
-        const SizedBox(width: 6),
-        Text(
-          '$sign${NumberFormat('#,###').format(diff.abs())} (${sign}${percent.toStringAsFixed(1)}%) vs last month',
-          style: TextStyle(color: color, fontSize: 12),
-        ),
-      ],
-    );
-  }
-
-  Map<String, double> _monthTotals(List<Expense> expenses) {
-    final now = DateTime.now();
-    final firstDayOfCurrentMonth = DateTime(now.year, now.month, 1);
-    final firstDayOfLastMonth = DateTime(now.year, now.month - 1, 1);
-
-    double currentMonthTotal = 0;
-    double lastMonthTotal = 0;
-
-    for (var expense in expenses) {
-      if (expense.date.isAfter(firstDayOfLastMonth)) {
-        if (expense.date.isBefore(firstDayOfCurrentMonth) || expense.date.day == 1) {
-          lastMonthTotal += expense.amount;
-        } else {
-          currentMonthTotal += expense.amount;
-        }
-      }
-    }
-
-    return {
-      'current': currentMonthTotal,
-      'previous': lastMonthTotal,
-    };
-  }
 
   void _resetFilters() {
     setState(() {
@@ -323,9 +282,10 @@ class _HomeScreenState extends State<HomeScreen> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            const Text(
-                              'Tycha',
-                              style: TextStyle(color: Colors.white, fontSize: 18),
+                            Image.asset(
+                              'assets/images/TychaLogo.png',
+                              width: 90,
+                              fit: BoxFit.contain,
                             ),
                             IconButton(
                               icon: const Icon(Icons.logout, color: Colors.white),
@@ -339,7 +299,11 @@ class _HomeScreenState extends State<HomeScreen> {
                             children: [
                               Text(
                                 "You've Spent",
-                                style: TextStyle(color: Colors.white.withOpacity(0.7), fontSize: 14),
+                                style: TextStyle(
+                                  color: Colors.white.withOpacity(0.7),
+                                  fontSize: 14,
+                                  fontFamily: 'SpaceGrotesk',
+                                ),
                               ),
                               const SizedBox(height: 4),
                               FittedBox(
@@ -350,6 +314,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     color: Colors.white,
                                     fontSize: 48,
                                     fontWeight: FontWeight.bold,
+                                    fontFamily: 'SpaceGrotesk',
                                   ),
                                 ),
                               ),
@@ -374,12 +339,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: ListView(
                   padding: const EdgeInsets.only(top: 12),
                   children: [
-                    if (selectedRange == TimeRange.month)
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: _buildMonthDelta(expenses),
-                      ),
-                    const SizedBox(height: 8),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: Center(
@@ -388,7 +347,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           child: SegmentedButton<TimeRange>(
                             segments: const [
                               ButtonSegment(value: TimeRange.month, label: Text('Month')),
-                              ButtonSegment(value: TimeRange.week, label: Text('7 Days')),
+                              ButtonSegment(value: TimeRange.week, label: Text('Week')),
+                              ButtonSegment(value: TimeRange.year, label: Text('Year')),
                               ButtonSegment(value: TimeRange.all, label: Text('All')),
                             ],
                             selected: {selectedRange},
