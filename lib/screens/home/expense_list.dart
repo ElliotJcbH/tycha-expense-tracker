@@ -67,7 +67,7 @@ class ExpenseList extends StatelessWidget {
           child: Card(
             margin: const EdgeInsets.only(bottom: 12),
             child: ListTile(
-              contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+              contentPadding: const EdgeInsets.symmetric(horizontal: 0, vertical: 6),
               leading: CircleAvatar(
                 backgroundColor: const Color(0xFF1A36FF).withOpacity(0.1),
                 child: Icon(_getCategoryIcon(expense.category), color: const Color(0xFF1A36FF)),

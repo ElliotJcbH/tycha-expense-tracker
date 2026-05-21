@@ -162,29 +162,31 @@ class _HomeScreenState extends State<HomeScreen> {
       builder: (context) {
         return SafeArea(
           child: Padding(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Column(
               mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Center(
                   child: Container(
                     width: 40,
                     height: 4,
-                    margin: const EdgeInsets.only(bottom: 16),
+                    margin: const EdgeInsets.only(top: 16, bottom: 16),
                     decoration: BoxDecoration(
                       color: Colors.grey.shade300,
                       borderRadius: BorderRadius.circular(20),
                     ),
                   ),
                 ),
-                const Text('Filter by category', style: TextStyle(fontWeight: FontWeight.w600)),
+                const Text('Filter by Category', style: TextStyle(fontWeight: FontWeight.w600)),
                 const SizedBox(height: 12),
                 Flexible(
                   child: ListView(
                     shrinkWrap: true,
                     children: categoryFilters.map((cat) {
                       return RadioListTile<String>(
+                        contentPadding: EdgeInsets.zero,
                         value: cat,
                         groupValue: selectedCategory,
                         title: Text(cat),
@@ -289,6 +291,9 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                             IconButton(
                               icon: const Icon(Icons.logout, color: Colors.white),
+                              style: ButtonStyle(
+                                padding: WidgetStateProperty.all(EdgeInsets.zero),
+                              ),
                               onPressed: () => _confirmSignOut(auth),
                             ),
                           ],
@@ -341,22 +346,46 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: Center(
-                        child: FittedBox(
-                          fit: BoxFit.scaleDown,
-                          child: SegmentedButton<TimeRange>(
-                            segments: const [
-                              ButtonSegment(value: TimeRange.month, label: Text('Month')),
-                              ButtonSegment(value: TimeRange.week, label: Text('Week')),
-                              ButtonSegment(value: TimeRange.year, label: Text('Year')),
-                              ButtonSegment(value: TimeRange.all, label: Text('All')),
-                            ],
-                            selected: {selectedRange},
-                            onSelectionChanged: (value) {
-                              setState(() => selectedRange = value.first);
-                            },
+                      child: SegmentedButton<TimeRange>(
+                        expandedInsets: EdgeInsets.zero,
+                        showSelectedIcon: false,
+                        style: ButtonStyle(
+                          backgroundColor: WidgetStateProperty.resolveWith<Color>(
+                              (states) {
+                                if (states.contains(WidgetState.selected)) {
+                                  return Color(0xFF1A36FF);
+                                }
+                                return Colors.transparent;
+                              },
+                          ),
+                          foregroundColor: WidgetStateProperty.resolveWith<Color>(
+                              (states) {
+                                if (states.contains(WidgetState.selected)) {
+                                  return Colors.white;
+                                }
+                                return Colors.black;
+                              },
+                          ),
+                          side: WidgetStateProperty.resolveWith<BorderSide>(
+                              (states) => BorderSide(
+                                color: Colors.black87,
+                                width: 0.5,
+                              ),
+                          ),
+                          shape: WidgetStateProperty.all(
+                            RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                           ),
                         ),
+                        segments: const [
+                          ButtonSegment(value: TimeRange.month, label: Text('Month', style: TextStyle(fontSize: 12),)),
+                          ButtonSegment(value: TimeRange.week, label: Text('Week', style: TextStyle(fontSize: 12),)),
+                          ButtonSegment(value: TimeRange.year, label: Text('Year', style: TextStyle(fontSize: 12),)),
+                          ButtonSegment(value: TimeRange.all, label: Text('All', style: TextStyle(fontSize: 12),)),
+                        ],
+                        selected: {selectedRange},
+                        onSelectionChanged: (value) {
+                          setState(() => selectedRange = value.first);
+                        },
                       ),
                     ),
                     const SizedBox(height: 12),
@@ -380,6 +409,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           const Text('Filters', style: TextStyle(fontWeight: FontWeight.w600)),
                           TextButton.icon(
                             onPressed: () => _openFilterSheet(categoryFilters),
+                            style: ButtonStyle(
+                              padding: WidgetStateProperty.all(EdgeInsets.zero),
+                            ),
                             icon: const Icon(Icons.tune),
                             label: Text(selectedCategory == 'All' ? 'All' : selectedCategory),
                           ),
@@ -403,7 +435,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         },
                       ),
                     ),
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 0),
                     ExpenseList(
                       expenses: filteredExpenses,
                       db: db,

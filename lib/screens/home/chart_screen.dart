@@ -96,6 +96,7 @@ class _ChartScreenState extends State<ChartScreen> {
       padding: const EdgeInsets.only(right: 8),
       child: ChoiceChip(
         label: Text(label),
+        checkmarkColor: Colors.white,
         selected: isSelected,
         onSelected: (_) => setState(() => selectedView = value),
       ),
