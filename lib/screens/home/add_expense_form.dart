@@ -51,6 +51,7 @@ class _AddExpenseFormState extends State<AddExpenseForm> {
 
     return Container(
       padding: const EdgeInsets.all(20),
+      color: Colors.white,
       child: Form(
         key: _formKey,
         child: SingleChildScrollView(
